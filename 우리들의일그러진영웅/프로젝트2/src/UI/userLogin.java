@@ -27,7 +27,7 @@ public class userLogin extends JPanel {
 	static Socket socket;
 	BufferedReader in;
 	PrintWriter out;
-
+	static String myName;
 	/**
 	 * Create the panel.
 	 */
@@ -111,15 +111,18 @@ public class userLogin extends JPanel {
 		loginBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 						try {
-							socket = new Socket("192.168.1.239", 9000);
+							socket = new Socket("127.0.0.1", 9000);
 							out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
 
 							String ia = "1";
 							out.println(ia);
 
 							String username = idFeild.getText();
+							myName = username;
+//							System.out.println(myName);
 							out.println(username);
 
+							
 							String password = String.valueOf(pwField.getPassword());
 							out.println(password);
 

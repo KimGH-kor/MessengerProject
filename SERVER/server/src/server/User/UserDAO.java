@@ -7,11 +7,12 @@ import java.util.List;
 
 public class UserDAO {
 	public static List<User> list = new ArrayList();
-	public static HashMap<User, Socket> hash = new HashMap<>();
+	public static HashMap<String, User> hash = new HashMap<>();
 	public UserDAO() {
-		list.add(new User("mopn", "111", "김", "010"));
-		list.add(new User("yang", "111", "양", "010"));
-		list.add(new User("hong", "111", "홍", "010"));
+		list.add(new User("mopn", "111", "김경환", "010"));
+		list.add(new User("yang", "111", "양지현", "010"));
+		list.add(new User("hong", "111", "홍남기", "010"));
+		list.add(new User("woo", "111", "우한영", "010"));
 		System.out.println("현재 전체 회원 수 : "+list.size());
 	}
 	//로그인
@@ -35,5 +36,6 @@ public class UserDAO {
 			list.add(new User(id, pass, name, tel));
 			return 1;//생성
 	}
+	
 }
 	

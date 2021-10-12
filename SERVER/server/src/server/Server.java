@@ -22,10 +22,8 @@ public class Server {
 		System.out.println("서버가 시작되었습니다.");
 		thread = new work();
 		thread.login();
-		thread.ulist();
 			try {
 				serversocket = new ServerSocket(9000);
-				serversocket.setReuseAddress(true);
 				while(true) {
 					socket = serversocket.accept();
 					System.out.println("[로그인 시도]"
