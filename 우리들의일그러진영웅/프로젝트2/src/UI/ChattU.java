@@ -1,27 +1,30 @@
 package UI;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import java.awt.Color;
 
 public class ChattU extends JDialog {
 	BufferedReader in = null; // 입력 담당 클래스
 	PrintWriter out = null; // 출력 담당 클래스
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
-	private JTextField textField_1;
-
+	public static JTextField textField;
+	static JTextArea textArea;
+	Client client = new Client();
 	/**
 	 * Launch the application.
 	 */
@@ -55,21 +58,20 @@ public class ChattU extends JDialog {
 				buttonPane.add(textField);
 				textField.setColumns(10);
 			}
+			JPanel panel = new JPanel();
+			panel.setBounds(12, 10, 412, 202);
+			contentPanel.add(panel);
+			panel.setLayout(null);
+
+			textArea = new JTextArea();
+			textArea.setBounds(0, 0, 412, 202);
+			panel.add(textArea);
 			{
 				JButton okButton = new JButton("\uC804\uC1A1");
 				okButton.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						System.out.println("보내기");
-						//out = new PrintWriter(new OutputStreamWriter(userLogin.socket.getOutputStream()));
-						try {
-							out = new PrintWriter(new OutputStreamWriter(userLogin.socket.getOutputStream()));
-							out.println("asd");
-							out.flush();
-						} catch (IOException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-
+						Client.send();
 					}
 				});
 				okButton.setBounds(376, 5, 55, 23);
@@ -78,21 +80,5 @@ public class ChattU extends JDialog {
 				getRootPane().setDefaultButton(okButton);
 			}
 		}
-		
-		JPanel panel = new JPanel();
-		panel.setBounds(12, 10, 412, 202);
-		contentPanel.add(panel);
-		panel.setLayout(null);
-		
-		textField_1 = new JTextField();
-		textField_1.setBackground(Color.WHITE);
-		textField_1.setBounds(0, 0, 412, 202);
-		textField_1.setEditable(false); 
-		panel.add(textField_1);
-		textField_1.setColumns(10);
 	}
 }
-//public void send(String massege) {
-//	
-//}
-//}

@@ -31,11 +31,11 @@ public class User extends Thread{
 		while(true) {
 			try {
 				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				System.out.println("recv");
+				System.out.println("전송 받음");
 				String str = in.readLine();
-				System.out.println("recv2");
 				System.out.println(str);//전체인지 개인인지
-				
+				send(str);
+				System.out.println("전송 완료");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -45,9 +45,17 @@ public class User extends Thread{
 	}
 	public void send(String massege) {
 		try {
-			out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-			out.println(massege);
-			out.flush();
+			System.out.println("이까지 오니?");
+			int count = 0;
+			for(String i : UserDAO.hash.keySet()) {
+				out = new PrintWriter(new OutputStreamWriter(UserDAO.hash.get(i).getSocket().getOutputStream()));
+				out.println("5");
+				out.println(massege);
+				out.flush();
+				System.out.println("count :"+count++);
+				
+			}
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

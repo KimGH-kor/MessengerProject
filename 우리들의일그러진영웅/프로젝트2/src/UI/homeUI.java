@@ -92,7 +92,7 @@ public class homeUI extends JPanel {
 		myName = new JLabel();
 		myName.setBounds(105, 10, 120, 30);
 		panel.add(myName);
-
+		
 		myId = new JLabel();
 		myId.setBounds(105, 61, 120, 30);
 		panel.add(myId);
@@ -131,16 +131,16 @@ public class homeUI extends JPanel {
 		list.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent evt) {
 				JList list = (JList) evt.getSource();
-				if(evt.getClickCount() == 2) {
+//				if(evt.getClickCount() == 2) {
 					Rectangle r = list.getCellBounds(0, list.getLastVisibleIndex()); 
-//					if (r != null && r.contains(evt.getPoint())) {
-//						int index = list.locationToIndex(evt.getPoint()); 
+					if (r != null && r.contains(evt.getPoint())) {
+						int index = list.locationToIndex(evt.getPoint()); 
 						ChattU chat = new ChattU();
 						chat.setVisible(true);
-//				        System.out.println("몇번쨰 유저? : "+index);
-//						}
+				        System.out.println("몇번쨰 유저? : "+index);
+						}
 
-				}
+//				}
 			}
 		});
 		
