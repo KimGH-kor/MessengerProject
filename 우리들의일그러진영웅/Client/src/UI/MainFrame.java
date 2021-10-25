@@ -29,7 +29,7 @@ import javax.swing.JButton;
 public class MainFrame extends JFrame {
 
 	private JPanel contentPane;
-
+	static MainFrame frame;
 	/**
 	 * Launch the application.
 	 */

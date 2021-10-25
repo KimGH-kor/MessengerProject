@@ -14,7 +14,6 @@ import server.User.UserDAO;
 public class work extends Thread {
 	BufferedReader in = null; // 입력 담당 클래스
 	PrintWriter out = null; // 출력 담당 클래스
-	UserDAO user = new UserDAO();
 
 	// 로그인 및 회원가입 담당 스레드 메서드
 	public void login() {
@@ -26,28 +25,22 @@ public class work extends Thread {
 							Socket socket = Server.list.removeFirst();
 							in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 							out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
-
 							String ia = in.readLine();
-
 							if (ia.equals("1")) {
-								
 								String id = in.readLine();
 								String pass = in.readLine();
-								int log = user.logUser(id, pass);
+								int log = Server.user.logUser(id, pass);
 								out.println(log);
 								out.flush();
 								if (log != -1) {
 									System.out.println("1 " + socket);
-									
 									User u = UserDAO.list.get(log);
 									System.out.println(in);
 									u.setSocket(socket);
 									UserDAO.hash.put(u.getuID(), u);
-									System.out.println("check1");
 									ulist();
-									System.out.println("check2");
-									u.start();
-									
+									u.recive();
+									System.out.println("2번 오류 통괴");
 								}
 							}
 							if (ia.equals("2")) {
@@ -55,21 +48,23 @@ public class work extends Thread {
 								String pass = in.readLine();
 								String name = in.readLine();
 								String tel = in.readLine();
-								int log = user.regUser(id, pass, name, tel);
+								int log = Server.user.regUser(id, pass, name, tel);
 								out.println(log);
 								out.flush();
-								System.out.println("한분이 회원가입 하셨습니다. : " + user.list.size());
+								System.out.println("한분이 회원가입 하셨습니다. : " + Server.user.list.size());
 								socket.close();
 							}
 
 						} catch (Exception e) {
-							// TODO: handle exception
+							System.out.println("큐에서 오류");
+							System.out.println(e);
+							break;
 						}
 					}
 					try {
 						Thread.sleep(100);
 					} catch (Exception e) {
-						// TODO: handle exception
+						System.out.println(e);
 					}
 				}
 			}

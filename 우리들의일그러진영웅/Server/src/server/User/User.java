@@ -7,6 +7,8 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import server.objec.work;
+
 public class User extends Thread{
 	private String uID;
 	private String pw;
@@ -15,6 +17,7 @@ public class User extends Thread{
 	Socket socket;
 	BufferedReader in = null; // 입력 담당 클래스
 	PrintWriter out = null; // 출력 담당 클래스
+	work u = new work();
 	
 	public User(String uID, String pw, String uName, String uTel) {
 		this.uID = uID;
@@ -27,24 +30,42 @@ public class User extends Thread{
 		this.socket = socket;
 	}
 	//리시브스레드
-	public void run() {
-		while(true) {
-			try {
-				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				System.out.println("전송 받음");
-					String reciuser = in.readLine();
-					System.out.println(reciuser);
-					String str = in.readLine();
-					System.out.println(str);//전체인지 개인인지
-					send(str, reciuser);
-					System.out.println("전송 완료");		
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	public void recive() {
+		Thread thread = new Thread() {
+			public void run() {
+				while(true) {
+					try {
+						in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+						System.out.println("전송 받음");
+							String reciuser = in.readLine();
+							System.out.println(reciuser);
+							String str = in.readLine();
+							System.out.println(str);//전체인지 개인인지
+							send(str, reciuser);
+							System.out.println("전송 완료");		
+					} catch (Exception e) {
+						System.out.println(e);
+						try {
+							System.out.println(uID+"유저가 나감");
+							UserDAO.hash.remove(uID);
+							socket.close();
+							System.out.println("u리스트 다시보냄");
+							u.ulist();
+							break;
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							System.out.println(e);
+						}
+
+					}
+					
+				}
 			}
-			
-		}
+		};
+		thread.start();
 	}
+	
+	
 	public void send(String massege, String reciuser) {
 		try {
 			System.out.println("이까지 오니?");
@@ -61,8 +82,15 @@ public class User extends Thread{
 			}
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println(e);
+			try {
+				System.out.println("전송 실패 소켓 제거");
+				UserDAO.hash.remove(this.uID);
+				socket.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				System.out.println(e1);
+			}
 		}
 	}
 	

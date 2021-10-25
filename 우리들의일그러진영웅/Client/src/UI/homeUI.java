@@ -62,7 +62,14 @@ public class homeUI extends JPanel {
 						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						System.out.println("메세지 전송 실패");
+						try {
+							userLogin.socket.close();
+							break;
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 					}
 					try {
 						Thread.sleep(100);
@@ -91,19 +98,15 @@ public class homeUI extends JPanel {
 		panel.setBounds(0, 0, 380, 129);
 		add(panel);
 		panel.setLayout(null);
-
-		JLabel lblNewLabel_1 = new JLabel("img");
-		lblNewLabel_1.setBorder(new LineBorder(new Color(0, 0, 0)));
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setBounds(12, 10, 81, 81);
-		panel.add(lblNewLabel_1);
 /////////////////////////////////////////////////////////////////////
 		myName = new JLabel();
-		myName.setBounds(105, 10, 120, 30);
+		myName.setFont(new Font("굴림", Font.PLAIN, 20));
+		myName.setBounds(12, 10, 356, 40);
 		panel.add(myName);
 
 		myId = new JLabel();
-		myId.setBounds(105, 61, 120, 30);
+		myId.setFont(new Font("굴림", Font.PLAIN, 20));
+		myId.setBounds(12, 60, 356, 40);
 		panel.add(myId);
 
 		JPanel panel_1 = new JPanel();
@@ -143,12 +146,12 @@ public class homeUI extends JPanel {
 					Rectangle r = list.getCellBounds(0, list.getLastVisibleIndex());
 					if (r != null && r.contains(evt.getPoint())) {
 						int index = list.locationToIndex(evt.getPoint());
-						ChattU chat = new ChattU();
-						chat.setVisible(true);
+
 						System.out.println("몇번쨰 유저? : " + index);
 						String recive[] = list.getSelectedValue().toString().split(": ");
 						ChattU.reciuser = recive[2];
-
+						ChattU chat = new ChattU(MainFrame.frame,ChattU.reciuser);
+						chat.setVisible(true);
 					}
 
 				}

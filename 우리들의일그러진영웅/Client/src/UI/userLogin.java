@@ -130,7 +130,7 @@ public class userLogin extends JPanel {
 							
 							in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 							String response = in.readLine();
-							System.out.println(response);
+							System.out.println("DB에서 "+response+"번째 유저입니다.");
 							if (response.equals("-1")) {
 								frmMain.SetLog(thispan);
 							} else {
@@ -140,6 +140,12 @@ public class userLogin extends JPanel {
 						} catch (UnknownHostException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
+							try {
+								socket.close();
+							} catch (IOException e2) {
+								// TODO Auto-generated catch block
+								e2.printStackTrace();
+							}
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();

@@ -151,13 +151,16 @@ public class userRegist extends JPanel {
 			        if(response.equals("1")) {
 				        frmMain.SetLog(thispan);
 			        }
-				} catch (UnknownHostException e1) {
+				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+					try {
+						socket.close();
+					} catch (IOException e2) {
+						// TODO Auto-generated catch block
+						e2.printStackTrace();
+					}
+				} 
 			}
 		});
 		registBtn.setForeground(Color.WHITE);
