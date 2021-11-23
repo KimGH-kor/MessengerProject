@@ -16,21 +16,25 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 public class ChattU extends JDialog {
-   private final JPanel contentPanel = new JPanel();
+   private JPanel contentPanel = new JPanel();
    public JTextField textField;
-   public static JTextArea textArea;
-   String reciuser;
-   
+   public JTextArea textArea;
+   private String reciuser;
+   JScrollPane scrollPane;
 
    /**
     * Launch the application.
     */
-
+   
+   
+   
    public void send() {
 		try {
 			PrintWriter out = new PrintWriter(new OutputStreamWriter(userLogin.socket.getOutputStream()));
+			out.println("MSG");
 			out.println(reciuser);
-			out.println("<" + userLogin.myName + ">" + textField.getText());
+			System.out.println(reciuser);
+			out.println(textField.getText());
 			textField.setText("");
 			out.flush();
 			System.out.println("º¸³½ ÈÄ");
@@ -43,7 +47,8 @@ public class ChattU extends JDialog {
     * Create the dialog.
     */
    public ChattU(JFrame jframe, String title) {
-      super(jframe, title);
+      super(jframe, title, false);
+      reciuser = title;
          setResizable(false);
 
          setModal(false);
@@ -55,7 +60,7 @@ public class ChattU extends JDialog {
          panel.setBounds(0, 0, 380, 510);
          getContentPane().add(panel);
 
-         JScrollPane scrollPane = new JScrollPane(textField);
+         scrollPane = new JScrollPane(textField);
          scrollPane.setBounds(12, 10, 356, 500);
          panel.add(scrollPane);
 

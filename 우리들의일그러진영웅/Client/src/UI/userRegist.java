@@ -125,7 +125,7 @@ public class userRegist extends JPanel {
 		registBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-			        socket = new Socket("127.0.0.1", 9000);
+			        socket = new Socket("192.168.0.12", 9000);
 			        out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
 		        
 			        String ia = "2";

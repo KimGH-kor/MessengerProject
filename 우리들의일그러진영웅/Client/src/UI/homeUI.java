@@ -7,16 +7,15 @@ import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.LineNumberReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.HashMap;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -27,6 +26,7 @@ import javax.swing.border.BevelBorder;
 
 public class homeUI extends JPanel {
 	static DefaultListModel<String> m = new DefaultListModel<>();
+	static HashMap<String, ChattU> chList = new HashMap<>();
 	static JLabel myName;
 	static JLabel myId;
 	static BufferedReader in;
@@ -54,16 +54,30 @@ public class homeUI extends JPanel {
 								} else {
 									System.out.println(id + name);
 									m.addElement("이름 : " + name + " ID : " + id);
+									chList.put(id, new ChattU(new JFrame(), id));
 								}
 							}
 						} else if (ia.equals("5")) {
 							System.out.println("전송 받음2");
-							String user = in.readLine();
-							String line = in.readLine();
-							System.out.println(line);
-							ChattU.textArea.append(line + "\n");
-							writeFile(user, line);
-
+							String[] message = in.readLine().split("/");
+							if (chList.get(message[0]).textArea != null) {
+								chList.get(message[0]).textArea.append(message[1] + "\n");
+								chList.get(message[0]).scrollPane.getVerticalScrollBar().setValue(
+										chList.get(message[0]).scrollPane.getVerticalScrollBar().getMaximum());
+							}
+						} else if (ia.equals("6")) {
+							String reci = in.readLine();
+							System.out.println("세번쨰 관문 통과");
+							int cnt = Integer.parseInt(in.readLine());
+							if (cnt == 0) {
+								System.out.println("첫 대화입니다.");
+							} else {
+								for (int i = 0; i < cnt; i++) {
+									String[] msg = in.readLine().split("/");
+									chList.get(reci).textArea.append("<" + msg[0] + "> " + msg[1] + "\n");
+								}
+							}
+							System.out.println("마지막 관문 통과");
 						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
@@ -89,53 +103,6 @@ public class homeUI extends JPanel {
 		thread.start();
 	}
 
-	public static boolean readFile(String p1) {
-		LineNumberReader reader = null;
-		try {
-			reader = new LineNumberReader(new FileReader("C:/StringText/" + userLogin.myName + "/" + p1 + ".txt"));
-			while (true) {
-				String str = reader.readLine();
-				if (str == null) {
-					break;
-				}
-				ChattU.textArea.append(str + "\n");
-
-			}
-
-		} catch (FileNotFoundException fnfe) {
-			System.out.println("파일이 존재하지 않습니다.");
-		} catch (IOException ioe) {
-			System.out.println("파일을 읽을 수 없습니다.");
-		} finally {
-
-			try {
-				reader.close();
-				return true;
-			} catch (Exception e) {
-				return false;
-			}
-		}
-	}
-
-	public static boolean writeFile(String p1, String msg) {
-		PrintWriter writer = null;
-		try {
-			writer = new PrintWriter(new FileWriter("C:/StringText/" + userLogin.myName + "/" + p1 + ".txt", true));
-
-			writer.append(msg + '\n');
-
-		} catch (FileNotFoundException fnfe) {
-			System.out.println("파일을 출력할 수 없습니다.");
-		} finally {
-			try {
-				writer.close();
-				return true;
-			} catch (Exception e) {
-				return false;
-			}
-		}
-	}
-
 	/**
 	 * Create the panel.
 	 */
@@ -150,7 +117,7 @@ public class homeUI extends JPanel {
 		panel.setBounds(0, 0, 380, 129);
 		add(panel);
 		panel.setLayout(null);
-/////////////////////////////////////////////////////////////////////
+
 		myName = new JLabel();
 		myName.setFont(new Font("굴림", Font.PLAIN, 20));
 		myName.setBounds(12, 10, 356, 40);
@@ -201,10 +168,23 @@ public class homeUI extends JPanel {
 
 						System.out.println("몇번쨰 유저? : " + index);
 						String recive[] = list.getSelectedValue().toString().split(": ");
-						ChattU chat = new ChattU(frmMain, recive[2]);
-						chat.reciuser = recive[2];
-						readFile(recive[2]);
-						chat.setVisible(true);
+						if (!chList.get(recive[2]).isVisible()) {
+							try {
+								chList.get(recive[2]).textArea.setText("");
+								System.out.println("첫번쨰 관문 통과");
+								PrintWriter out = new PrintWriter(
+										new OutputStreamWriter(userLogin.socket.getOutputStream()));
+								out.println("6");
+								out.println(recive[2]);
+								out.flush();
+								System.out.println("두번쨰 관문 통과");
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							chList.get(recive[2]).setVisible(true);
+						}
+						
 
 					}
 

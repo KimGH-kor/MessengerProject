@@ -114,7 +114,7 @@ public class userLogin extends JPanel {
 		loginBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					socket = new Socket("127.0.0.1", 9000);
+					socket = new Socket("192.168.0.12", 9000);
 					out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
 
 					String ia = "1";
@@ -138,31 +138,6 @@ public class userLogin extends JPanel {
 					} else {
 						homeUI.add();
 						frmMain.SetHome(thispan);
-
-						// 이 부분 다시 확인-----------------------------------------------
-						String path1 = "c:/";
-						File basicFolder = new File(path1 + "/StringText");
-						File userFolder = new File(basicFolder.getPath() + "/" + myName);
-						if (!basicFolder.exists()) {
-							try {
-								basicFolder.mkdir(); // 폴더 생성합니다.
-
-							} catch (Exception e2) {
-								e2.getStackTrace();
-							}
-						} else {
-							System.out.println("1이미 폴더가 생성되어 있습니다.");
-						}
-						if (!userFolder.exists()) {
-							try {
-								userFolder.mkdir(); // 폴더 생성합니다.
-
-							} catch (Exception e3) {
-								e3.getStackTrace();
-							}
-						} else {
-							System.out.println("2이미 폴더가 생성되어 있습니다.");
-						}
 					}
 				} catch (UnknownHostException e1) {
 					// TODO Auto-generated catch block
